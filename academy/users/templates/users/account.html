@@ -1,0 +1,82 @@
+{% extends "course/base.html" %}
+{% load crispy_forms_tags %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/simple_nav.css' %}">
+{% endblock styles %}
+{% block content %}
+    <section class="account container shadow rounded py-4">
+        <h1 class="account-heading mb-5 text-center">{{ user.username }}</h1>
+        <div class="row">
+            <div class="col-lg-6 px-5 mb-5">
+                <h3 class="border-bottom mb-4 heading">Sessions</h4>
+                <div class="mb-5">
+                    {% if enrollments %}
+                        {% for enrollment in enrollments %}
+                            <div class="mb-4">
+                                {% if not enrollment.paid %}
+                                    <div class="row float-right mx-0">
+                                        <a class="btn btn-danger btn-icon mb-4" href="{% url 'enrollment_delete' enrollment.id %} "><i class="fa fa-trash"></i></a>
+                                    </div>
+                                {% endif %}
+                                <h5>{{ enrollment.session }}</h5>
+                                <p>{{ enrollment.paid|yesno:"Paid,Unpaid" }}</p>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>You have not enrolled in any sessions yet.</p>
+                    {% endif %}
+                    {% if session_form.session %}
+                        <form method="POST" action="{% url 'session_enrollment' %}">
+                            {% csrf_token %}
+                            <fieldset class="form-group">
+                                {{ session_form|crispy }}
+                            </fieldset>
+                            <div class="form-group text-center">
+                                <button class="btn btn-success" type="submit">Enroll</button>
+                            </div>
+                        </form>
+                    {% endif %}
+                </div>
+                <h3 class="border-bottom mb-4 heading">Feedback</h4>
+                {% if feedback_responses %}
+                    {% for feedback in feedback_responses %}
+                        <div class="feedback mb-4">
+                            <div class="row float-right mx-0">
+                                <a class="btn btn-secondary btn-icon mb-4 mr-2" href="{% url 'feedback_edit' feedback.id %} "><i class="fa fa-edit"></i></a>
+                                <a class="btn btn-danger btn-icon mb-4" href="{% url 'feedback_delete' feedback.id %} "><i class="fa fa-trash"></i></a>
+                            </div>
+                            <small class="text-muted">{{ feedback.date_created|date }}</small>
+                            {% if feedback.date_updated|date:"Ymd" > feedback.date_created|date:"Ymd" %}
+                                <small class="text-muted"><span class="text-danger font-italic ml-2">Updated: </span>{{ feedback.date_updated|date }}</small>
+                            {% endif %}
+                            <h5>{{ feedback.subject|slice:":15" }}{% if feedback.subject|length > 15 %}...{% endif %}</h5>
+                            <p>{{ feedback.content|slice:":20" }}{% if feedback.content|length > 20 %}...{% endif %}</p>
+                            {% if feedback_responses.count > 1 and not forloop.last %}
+                                <hr class="my-4" />
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p>You have not submitted any feedback yet.</p>
+                {% endif %}
+                <div class="text-center">
+                    <a class="btn btn-info" href="{% url 'feedback_create' %} ">Submit Feedback</a>
+                </div>
+            </div>
+            <div class="col-lg-6 px-5">
+                <form method="POST">
+                    {% csrf_token %}
+                    <h3 class="border-bottom mb-4 heading">Account Info</h4>
+                    <fieldset class="form-group">
+                        {{ user_form|crispy }}
+                        {{ account_form|crispy }}
+                    </fieldset>
+                    <div class="form-group text-center">
+                        <button class="btn btn-success" type="submit">Update</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+{% endblock content %}

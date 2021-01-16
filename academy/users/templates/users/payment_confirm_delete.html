@@ -1,0 +1,22 @@
+{% extends "course/base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/simple_nav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/sticky_footer.css' %}">
+{% endblock styles %}
+{% block content %}
+    <div class="form-container rounded shadow form-wide account px-5 py-4 text-center">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Unenroll from Session</legend>
+                <h4>{{ payment.session }}</h4>
+                <p class="mt-5">Are you sure you want to unenroll from this session?</p>
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-danger mr-2" type="submit">Unenroll</button>
+                <a class="btn btn-secondary" href="{% url 'account' %} ">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

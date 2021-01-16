@@ -1,0 +1,13 @@
+{% extends "course/base.html" %}
+{% block content %}
+    <a class="btn btn-info mt-1 mb-1" href="{% url 'feedback' %}">Back</a>
+    <div>
+        <span>From: </span><a class="mr-2" href="{% url 'user_feedback' feedback.user.username %}">{{ feedback.user }}</a>
+        <small class="text-muted">{{ feedback.date_created|date }}</small>
+        {% if feedback.date_updated|date:"Ymd" > feedback.date_created|date:"Ymd" %}
+            <small class="text-muted"><span class="text-danger font-italic ml-2">Updated: </span>{{ feedback.date_updated|date }}</small>
+        {% endif %}
+    </div>
+    <h3>{{ feedback.subject }}</h3>
+    <p>{{ feedback.content }}</p>
+{% endblock content %}
