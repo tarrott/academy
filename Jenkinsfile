@@ -24,7 +24,7 @@ pipeline {
             steps {
                 sh "python3 -m venv env"
                 sh "mv sample.env .env"
-                sh ". ./env/bin/activate && pip install -r requirements.txt && python3 academy/manage.py collectstatic"
+                sh ". ./env/bin/activate && pip install -r requirements.txt && python3 academy/manage.py collectstatic --no-input"
             }
         }
 
