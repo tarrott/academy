@@ -34,6 +34,3 @@
 
   - name: Copy static files into container volume
     shell: docker cp ./academy/media/* academy-nginx:/app/media/
-
-  - name: Copy media files into container volume
-    shell: docker cp ./academy/static/* academy-nginx:/app/static
