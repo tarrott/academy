@@ -7,7 +7,7 @@
       image: nginx:1.18
       restart_policy: always
       networks:
-        - name: backend
+        - name: academy_backend
       volumes:
         - /home/academy/nginx/default.conf:/etc/nginx/conf.d/default.conf
         - /home/academy/media:/app/media

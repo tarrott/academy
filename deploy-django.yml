@@ -1,6 +1,10 @@
 ---
 - hosts: "{{ host }}"
   tasks:
+  - name: Create backend network
+    docker_network:
+      name: academy_backend
+
   - name: Pull docker image
     docker_image:
       name: tarrott/academy:latest
@@ -10,7 +14,7 @@
     docker_container:
       name: academy
       image: tarrott/academy:latest
-      network:
+      networks:
         - name: academy_backend
         - name: postgres
       env:
