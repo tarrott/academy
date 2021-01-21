@@ -6,4 +6,5 @@ local_settings.py
 media/
 static/
 .env
+.host_vars.yml
 postgres-data/

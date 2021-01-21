@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: "{{ host }}"
   tasks:
   - name: Deploy container
     docker_container:

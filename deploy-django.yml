@@ -1,5 +1,5 @@
 ---
-- hosts: localhost
+- hosts: "{{ host }}"
   tasks:
   - name: Pull docker image
     docker_image:
@@ -10,11 +10,21 @@
     docker_container:
       name: academy
       image: tarrott/academy:latest
-      env:
-        VIRTUAL_HOST: "academy.{{ domain }}"
       network:
         - name: academy_backend
         - name: postgres
+      env:
+        DJANGO_SECRET_KEY: ${DJANGO_SECRET_KEY}
+        DEBUG: ${DEBUG}
+        ALLOWED_HOSTS: ${ALLOWED_HOSTS}
+        POSTGRES_HOST: ${POSTGRES_HOST}
+        POSTGRES_PORT: ${POSTGRES_PORT}
+        POSTGRES_NAME: ${POSTGRES_NAME}
+        POSTGRES_USER: ${POSTGRES_USER}
+        POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+        DJANGO_SU_NAME: ${DJANGO_SU_NAME}
+        DJANGO_SU_EMAIL: ${DJANGO_SU_EMAIL}
+        DJANGO_SU_PASSWORD: ${DJANGO_SU_PASSWORD}
       state: present
 
   - name: Get container info

@@ -36,14 +36,14 @@ pipeline {
         stage('Deploy django') {
             when { branch 'develop' }
             steps {
-                sh "ansible-playbook deploy-django.yml"
+                sh "ansible-playbook deploy-django.yml -e 'host=localhost'"
             }
         }
 
         stage('Deploy nginx') {
             when { branch 'develop' }
             steps {
-                sh "ansible-playbook deploy-nginx.yml"
+                sh "ansible-playbook deploy-nginx.yml -e 'host=localhost domain=timothyarrott.com subdomain=academy'"
             }
         }
 
