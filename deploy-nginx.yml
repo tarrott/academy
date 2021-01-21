@@ -9,7 +9,6 @@
       networks:
         - name: academy_backend
       volumes:
-        - /home/academy/nginx/default.conf:/etc/nginx/conf.d/default.conf
         - /home/academy/media:/app/media
         - /home/academy/static:/app/static
       env:
