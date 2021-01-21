@@ -23,9 +23,8 @@ pipeline {
             when { branch 'develop' }
             steps {
                 sh "python3 -m venv env"
-                sh ". ./env/bin/activate"
-                sh "pip install -r requirements.txt"
                 sh "mv sample.env .env"
+                sh ". ./env/bin/activate && pip install -r requirements.txt && python3 academy/manage.py collectstatic"
             }
         }
 
