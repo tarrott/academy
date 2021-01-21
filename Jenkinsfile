@@ -23,7 +23,7 @@ pipeline {
             when { branch 'develop' }
             steps {
                 sh "python3 -m venv env"
-                sh "source env/bin/activate"
+                sh ". ./env/bin/activate"
                 sh "pip install -r requirements.txt"
                 sh "mv sample.env .env"
             }
