@@ -20,7 +20,7 @@
         - name: postgres
       env:
         DJANGO_SECRET_KEY: "{{ env['DJANGO_SECRET_KEY'] }}"
-        DEBUG: "{{ \"env['DEBUG']\" }}"
+        DEBUG: "\"{{ env['DEBUG'] }}\""
         ALLOWED_HOSTS: "{{ env['ALLOWED_HOSTS'] }}"
         POSTGRES_HOST: "{{ env['POSTGRES_HOST'] }}"
         POSTGRES_PORT: "{{ env['POSTGRES_PORT'] }}"

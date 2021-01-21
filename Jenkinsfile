@@ -66,7 +66,6 @@ pipeline {
             when { branch 'develop' }
             steps {
                 sh "docker rmi ${HUB}/${IMAGE}"
-                sh "docker rmi ${HUB}/${IMAGE_REPO}:latest"
             }
         }
     }
