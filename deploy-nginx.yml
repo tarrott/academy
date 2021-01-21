@@ -1,0 +1,40 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Deploy container
+    docker_container:
+      name: academy-nginx
+      image: nginx:1.18
+      restart_policy: always
+      networks:
+        - name: backend
+      volumes:
+        - /home/academy/nginx/default.conf:/etc/nginx/conf.d/default.conf
+        - /home/academy/media:/app/media
+        - /home/academy/static:/app/static
+      env:
+        VIRTUAL_HOST: "{{ subdomain }}.{{ domain }}"
+      state: started
+  
+  - name: Get container info
+    docker_container_info:
+      name: academy-nginx
+    register: result
+
+  - name: Does container exist?
+    debug:
+      msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
+  
+  - name: Print container status
+    debug:
+      msg: "The container is {{ result.container['State']['Status'] }} (using image '{{ result.container['Config']['Image'] }}')"
+    when: result.exists
+  
+  - name: Copy nginx files into container volume
+    shell: docker cp ./nginx/default.conf academy-nginx:/etc/nginx/conf.d/default.conf
+
+  - name: Copy static files into container volume
+    shell: docker cp ./academy/media/* academy-nginx:/app/media/
+
+  - name: Copy media files into container volume
+    shell: docker cp ./academy/static/* academy-nginx:/app/static

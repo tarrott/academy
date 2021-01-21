@@ -1,0 +1,32 @@
+---
+- hosts: localhost
+  tasks:
+  - name: Pull docker image
+    docker_image:
+      name: tarrott/academy:latest
+      source: pull
+
+  - name: Deploy container
+    docker_container:
+      name: academy
+      image: tarrott/academy:latest
+      env:
+        VIRTUAL_HOST: "academy.{{ domain }}"
+      network:
+        - name: academy_backend
+        - name: postgres
+      state: present
+
+  - name: Get container info
+    docker_container_info:
+      name: academy
+    register: result
+
+  - name: Does container exist?
+    debug:
+      msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
+  
+  - name: Print container status
+    debug:
+      msg: "The container is {{ result.container['State']['Status'] }} (using image '{{ result.container['Config']['Image'] }}')"
+    when: result.exists
