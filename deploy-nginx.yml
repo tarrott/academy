@@ -40,7 +40,7 @@
     shell: docker cp ./nginx/default.conf academy-nginx:/etc/nginx/conf.d/default.conf
       
   - name: Remove previous static files in mount
-    shell: docker exec academy-nginx rm -rf /app/static/*
+    shell: docker exec academy-nginx sh -c 'rm -rf /app/static/*'
 
   - name: Copy static files into container volume
-    shell: docker cp ./academy/static/* academy-nginx:/app/static/
+    shell: docker cp ./academy/static/. academy-nginx:/app/static/
