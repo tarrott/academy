@@ -23,8 +23,13 @@ pipeline {
             when { branch 'develop' }
             steps {
                 sh "docker tag ${IMAGE_REPO}:latest ${HUB}/${IMAGE}"
-                sh "docker push ${HUB}/${IMAGE_REPO}:latest"
-                sh "docker push ${HUB}/${IMAGE}"
+                sh "docker tag ${IMAGE_REPO}:latest ${HUB}/${IMAGE_REPO}:latest"
+                script {
+                    withDockerRegistry([ credentialsId: "dockerhub", url: "" ]) {
+                        sh "docker push ${HUB}/${IMAGE}"
+                        sh "docker push ${HUB}/${IMAGE_REPO}:latest"
+                    }
+                }
             }
         }
 
@@ -39,6 +44,20 @@ pipeline {
             when { branch 'develop' }
             steps {
                 sh "ansible-playbook deploy-nginx.yml"
+            }
+        }
+
+        stage('Cleanup image') {
+            steps {
+                sh "docker rmi ${IMAGE_REPO}"
+            }
+        }
+
+        stage('Cleanup tags') {
+            when { branch 'develop' }
+            steps {
+                sh "docker rmi ${HUB}/${IMAGE}"
+                sh "docker rmi ${HUB}/${IMAGE_REPO}:latest"
             }
         }
     }
