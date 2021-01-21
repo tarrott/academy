@@ -19,7 +19,7 @@
   - name: Deploy container
     docker_container:
       name: academy-nginx
-      image: nginx:1.18
+      image: academy-nginx:latest
       restart_policy: always
       networks:
         - name: academy_backend
