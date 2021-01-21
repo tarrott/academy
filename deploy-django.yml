@@ -14,12 +14,13 @@
     docker_container:
       name: academy
       image: tarrott/academy:latest
+      command: gunicorn academy.wsgi --bind 0.0.0.0:80
       networks:
         - name: academy_backend
         - name: postgres
       env:
         DJANGO_SECRET_KEY: "{{ env['DJANGO_SECRET_KEY'] }}"
-        DEBUG: "{{ env['DEBUG']|quote }}"
+        DEBUG: "{{ \"env['DEBUG']\" }}"
         ALLOWED_HOSTS: "{{ env['ALLOWED_HOSTS'] }}"
         POSTGRES_HOST: "{{ env['POSTGRES_HOST'] }}"
         POSTGRES_PORT: "{{ env['POSTGRES_PORT'] }}"
@@ -29,7 +30,7 @@
         DJANGO_SU_NAME: "{{ env['DJANGO_SU_NAME'] }}"
         DJANGO_SU_EMAIL: "{{ env['DJANGO_SU_EMAIL'] }}"
         DJANGO_SU_PASSWORD: "{{ env['DJANGO_SU_PASSWORD'] }}"
-      state: present
+      state: started
 
   - name: Get container info
     docker_container_info:
