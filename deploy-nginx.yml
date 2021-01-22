@@ -46,6 +46,8 @@
 
   - name: Remove previous static files in mount
     shell: docker exec academy-nginx sh -c 'rm -rf /app/static/*'
+    when: result.exists
 
   - name: Copy static files into container volume
     shell: docker cp ./academy/static/. academy-nginx:/app/static/
+    when: result.exists
