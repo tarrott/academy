@@ -22,7 +22,7 @@ class Feedback(models.Model):
 class Instructor(models.Model):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
-    image = models.ImageField(default='profile.jpg', upload_to='resource_logos')
+    image = models.ImageField(default='profile.jpg', upload_to='instructors')
     email = models.EmailField(null=True, blank=True)
     instagram = models.URLField(null=True, blank=True)
     twitter = models.URLField(null=True, blank=True)
@@ -60,7 +60,7 @@ class Resource(models.Model):
     content = models.TextField(null=True, blank=True,
         help_text="Text shown on the individual resource page to describe the resource in depth."
     )
-    image = models.ImageField(default='resource_default.jpg', upload_to='resource_logos')
+    image = models.ImageField(default='resource_default.jpg', upload_to='resources')
     order = models.SmallIntegerField(unique=True, null=True, blank=True,
         help_text="Order that the resource is displayed on the homepage. Must be unique."
     )
