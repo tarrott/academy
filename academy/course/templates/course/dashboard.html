@@ -1,0 +1,182 @@
+{% extends "course/base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/sb-admin-2.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/fontawesome-all.min.css' %}">
+{% endblock styles %}
+{% block header %}{% endblock header %}
+{% block messages %}{% endblock messages %}
+{% block content %}
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        <!-- Sidebar -->
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+
+            <!-- Sidebar - Brand -->
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'course_home' %}">
+                <div class="sidebar-brand-icon">
+                    <i class="fas fa-home"></i>
+                </div>
+                <div class="sidebar-brand-text mx-3">Academy</div>
+            </a>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Dashboard
+            </div>
+
+            <!-- Nav Item - Overview -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'dashboard' %}">
+                    <i class="fas fa-fw fa-chart-area"></i>
+                    <span>Overview</span></a>
+            </li>
+
+            <!-- Nav Item - Feedback -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'feedback' %}">
+                    <i class="fas fa-fw fa-comments"></i>
+                    <span>Feedback</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Admin
+            </div>
+
+            <!-- Nav Item - Admin -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:index' %}">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Overview</span></a>
+            </li>
+
+            <!-- Nav Item - Sessions -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:course_session_changelist' %}">
+                    <i class="fas fa-fw fa-chalkboard"></i>
+                    <span>Sessions</span></a>
+            </li>
+
+            <!-- Nav Item - Resources -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:course_resource_changelist' %}">
+                    <i class="fas fa-fw fa-book"></i>
+                    <span>Resources</span></a>
+            </li>
+
+            <!-- Nav Item - Testimonials -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:course_testimonial_changelist' %}">
+                    <i class="fas fa-fw fa-quote-right"></i>
+                    <span>Testimonials</span></a>
+            </li>
+
+            <!-- Nav Item - Instructors -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:course_instructor_changelist' %}">
+                    <i class="fas fa-fw fa-chalkboard-teacher"></i>
+                    <span>Instructors</span></a>
+            </li>
+
+            <!-- Divider -->
+            <hr class="sidebar-divider">
+
+            <!-- Heading -->
+            <div class="sidebar-heading">
+                Users
+            </div>
+
+            <!-- Nav Item - Users -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:auth_user_changelist' %}">
+                    <i class="fas fa-fw fa-user"></i>
+                    <span>User List</span></a>
+            </li>
+
+            <!-- Nav Item - Payments -->
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin:users_payment_changelist' %}">
+                    <i class="fas fa-fw fa-dollar-sign"></i>
+                    <span>Payments</span></a>
+            </li>
+
+            <!-- Sidebar Toggler -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
+
+        </ul>
+        <!-- End of Sidebar -->
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-0 static-top shadow">
+
+                    <!-- Sidebar Toggle (Topbar) -->
+                    <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars"></i>
+                    </button>
+
+                    <!-- Topbar Navbar -->
+                    <ul class="navbar-nav ml-auto">
+
+                        <!-- Nav Item - User Information -->
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'account' %}" role="button">
+                                <span class="mr-2 d-lg-inline text-gray-600 small">{{ user.username }}</span>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                {% if messages %}
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                {% endif %}
+
+                <div class="container-fluid mt-4">
+                    {% block dashboard %}{% endblock dashboard %}
+                </div>
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <span>Copyright &copy; Academy 2021</span>
+                    </div>
+                </div>
+            </footer>
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    {% block scripts %}
+        <script src="{% static 'course/js/sb-admin-2.min.js' %}"></script>
+    {% endblock scripts %}
+{% endblock content %}
+{% block footer %}{% endblock footer %}

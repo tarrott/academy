@@ -1,0 +1,47 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+  - name: Create backend network
+    docker_network:
+      name: academy_backend
+
+  - name: Pull docker image
+    docker_image:
+      name: tarrott/academy:latest
+      source: pull
+
+  - name: Deploy container
+    docker_container:
+      name: academy
+      image: tarrott/academy:latest
+      command: gunicorn academy.wsgi --bind 0.0.0.0:80
+      networks:
+        - name: academy_backend
+        - name: postgres
+      env:
+        DJANGO_SECRET_KEY: "{{ env['DJANGO_SECRET_KEY'] }}"
+        DEBUG: "\"{{ env['DEBUG'] }}\""
+        ALLOWED_HOSTS: "{{ env['ALLOWED_HOSTS'] }}"
+        POSTGRES_HOST: "{{ env['POSTGRES_HOST'] }}"
+        POSTGRES_PORT: "{{ env['POSTGRES_PORT'] }}"
+        POSTGRES_NAME: "{{ env['POSTGRES_NAME'] }}"
+        POSTGRES_USER: "{{ env['POSTGRES_USER'] }}"
+        POSTGRES_PASSWORD: "{{ env['POSTGRES_PASSWORD'] }}"
+        DJANGO_SU_NAME: "{{ env['DJANGO_SU_NAME'] }}"
+        DJANGO_SU_EMAIL: "{{ env['DJANGO_SU_EMAIL'] }}"
+        DJANGO_SU_PASSWORD: "{{ env['DJANGO_SU_PASSWORD'] }}"
+      state: started
+
+  - name: Get container info
+    docker_container_info:
+      name: academy
+    register: result
+
+  - name: Does container exist?
+    debug:
+      msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
+  
+  - name: Print container status
+    debug:
+      msg: "The container is {{ result.container['State']['Status'] }} (using image '{{ result.container['Config']['Image'] }}')"
+    when: result.exists

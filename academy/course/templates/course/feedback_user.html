@@ -1,0 +1,36 @@
+{% extends "course/dashboard.html" %}
+{% block content %}
+    <h2 class="mb-3">Feedback from {{ view.kwargs.username }} ({{ page_obj.paginator.count }} submitted)</h2>
+    {% for feedback in feedback_list %}
+        <h4>{{ feedback.subject }}</h4>
+        {% if feedback.date_updated|date:"Ymd" > feedback.date_created|date:"Ymd" %}
+            <p>Updated: {{ feedback.date_updated|date }}</p>
+        {% endif %}
+        <p>{{ feedback.user }}</p>
+        <p>{{ feedback.date_created|date }}</p>
+        <a href="{% url 'feedback_detail' feedback.id %}"><p>Read more...</p></a>
+    {% endfor %}
+    <div class="text-center">
+        {% if is_paginated %}
+            {% if page_obj.has_previous %}
+                <a class="btn btn-outline-info mb-4" href="?page=1">First</a>
+                <a class="btn btn-outline-info mb-4 mr-3" href="?page={{ page_obj.previous_page_number }}"">Previous</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+                {% if num == page_obj.number %}
+                    <a class="btn btn-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% elif num > page_obj.number|add:'-3' and  num < page_obj.number|add:'3' %}
+                    <a class="btn btn-outline-info mb-4" href="?page={{ num }}">{{ num }}</a>
+                {% elif num == page_obj.number|add:'-3' or  num == page_obj.number|add:'3' %}
+                    <span>...</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="btn btn-outline-info mb-4 ml-3" href="?page={{ page_obj.next_page_number}} ">Next</a>
+                <a class="btn btn-outline-info mb-4" href="?page={{ page_obj.paginator.num_pages }}"">Last</a>
+            {% endif %}
+        {% endif %}
+    </div>
+{% endblock content %}

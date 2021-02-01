@@ -1,0 +1,53 @@
+---
+- hosts: "{{ host }}"
+  tasks:
+  - name: Replace deployment URL
+    lineinfile:
+      path: ./nginx/default.conf
+      regexp: 'server_name'
+      line: "    server_name {{ subdomain }}.{{ domain }};"
+      backrefs: yes
+
+  - name: Build container
+    docker_image:
+      build:
+        path: ./nginx
+      name: academy-nginx
+      tag: latest
+      source: build
+
+  - name: Deploy container
+    docker_container:
+      name: academy-nginx
+      image: academy-nginx:latest
+      restart_policy: always
+      networks:
+        - name: academy_backend
+      volumes:
+        - /home/academy/media:/app/media
+        - /home/academy/static:/app/static
+      env:
+        VIRTUAL_HOST: "{{ subdomain }}.{{ domain }}"
+      state: started
+  
+  - name: Get container info
+    docker_container_info:
+      name: academy-nginx
+    register: result
+
+  - name: Does container exist?
+    debug:
+      msg: "The container {{ 'exists' if result.exists else 'does not exist' }}"
+  
+  - name: Print container status
+    debug:
+      msg: "The container is {{ result.container['State']['Status'] }} (using image '{{ result.container['Config']['Image'] }}')"
+    when: result.exists
+
+  - name: Remove previous static files in mount
+    shell: docker exec academy-nginx sh -c 'rm -rf /app/static/*'
+    when: result.exists
+
+  - name: Copy static files into container volume
+    shell: docker cp ./academy/static/. academy-nginx:/app/static/
+    when: result.exists

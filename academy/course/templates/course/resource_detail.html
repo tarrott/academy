@@ -1,0 +1,6 @@
+{% extends "course/base.html" %}
+{% block content %}
+    <a class="btn btn-info mt-1 mb-1" href="{% url 'resource' %}">Back</a>
+    <h3>{{ resource.name }}</h3>
+    <p>{{ resource.content }}</p>
+{% endblock content %}

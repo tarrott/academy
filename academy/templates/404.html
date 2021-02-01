@@ -1,0 +1,19 @@
+{% extends "course/base.html" %}
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/simple_nav.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'course/css/sticky_footer.css' %}">
+{% endblock styles %}
+{% block content %}
+    <div class="container">
+        <div class="form-container rounded shadow error-page account mt-5 px-5 py-4 text-center">
+            <h2 class="mb-4">Sorry, the page you requested cannot be found!</h2>
+            <h4><a href="{% url 'course_home' %}">Return Home</a></h4>
+            {% if user.is_superuser %}
+                <h4><a href="{% url 'dashboard' %}">Go to Dashboard</a></h4>
+            {% elif user.is_authenticated %}
+                <h4><a href="{% url 'account' %}">Go to your Account</a></h4>
+            {% endif %}
+        </div>
+    </div>
+{% endblock content %}
